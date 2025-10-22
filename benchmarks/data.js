@@ -1,60 +1,8 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1761121847588,
+  "lastUpdate": 1761148815916,
   "repoUrl": "https://github.com/czlonkowski/n8n-mcp",
   "entries": {
     "n8n-mcp Benchmarks": [
-      {
-        "commit": {
-          "author": {
-            "email": "56956555+czlonkowski@users.noreply.github.com",
-            "name": "Romuald Członkowski",
-            "username": "czlonkowski"
-          },
-          "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": true,
-          "id": "4b764c6110f9e06774776ce721d41f4b2fd1c399",
-          "message": "Merge pull request #254 from czlonkowski/fix/telemetry-error-message-capture\n\nfeat(telemetry): capture error messages with security hardening",
-          "timestamp": "2025-10-03T17:07:02+02:00",
-          "tree_id": "0eaea9fd102d37fe82d6ecd16d29c3f72770ef1a",
-          "url": "https://github.com/czlonkowski/n8n-mcp/commit/4b764c6110f9e06774776ce721d41f4b2fd1c399"
-        },
-        "date": 1759504145549,
-        "tool": "customSmallerIsBetter",
-        "benches": [
-          {
-            "name": "sample - array sorting - small",
-            "value": 0.0196,
-            "range": "0.29900000000000004",
-            "unit": "ms",
-            "extra": "50892 ops/sec"
-          },
-          {
-            "name": "sample - array sorting - large",
-            "value": 3.1765,
-            "range": "0.6139000000000001",
-            "unit": "ms",
-            "extra": "315 ops/sec"
-          },
-          {
-            "name": "sample - string concatenation",
-            "value": 0.0046,
-            "range": "0.30920000000000003",
-            "unit": "ms",
-            "extra": "218413 ops/sec"
-          },
-          {
-            "name": "sample - object creation",
-            "value": 0.0662,
-            "range": "0.2958",
-            "unit": "ms",
-            "extra": "15105 ops/sec"
-          }
-        ]
-      },
       {
         "commit": {
           "author": {
@@ -1983,6 +1931,37 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/czlonkowski/n8n-mcp/commit/7300957d136cfa009e8a5610d741124a093dea5b"
         },
         "date": 1761121847169,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "sample - array sorting - small",
+            "value": 0.0136,
+            "range": "0.3096",
+            "unit": "ms",
+            "extra": "73341 ops/sec"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "56956555+czlonkowski@users.noreply.github.com",
+            "name": "Romuald Członkowski",
+            "username": "czlonkowski"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c76ffd9fb182a75a64642d73118b112adfa12b96",
+          "message": "fix: sticky notes validation - eliminate false positives in workflow updates (#350)\n\nFixed critical bug where sticky notes (UI-only annotation nodes) incorrectly\ntriggered \"disconnected node\" validation errors when updating workflows via\nMCP tools (n8n_update_partial_workflow, n8n_update_full_workflow).\n\nProblem:\n- Workflows with sticky notes failed validation with \"Node is disconnected\" errors\n- n8n-validation.ts lacked sticky note exclusion logic\n- workflow-validator.ts had correct logic but as private method\n- Code duplication led to divergent behavior\n\nSolution:\n1. Created shared utility module (src/utils/node-classification.ts)\n   - isStickyNote(): Identifies all sticky note type variations\n   - isTriggerNode(): Identifies trigger nodes\n   - isNonExecutableNode(): Identifies UI-only nodes\n   - requiresIncomingConnection(): Determines connection requirements\n\n2. Updated n8n-validation.ts to use shared utilities\n   - Fixed disconnected nodes check to skip non-executable nodes\n   - Added validation for workflows with only sticky notes\n   - Fixed multi-node connection check to exclude sticky notes\n\n3. Updated workflow-validator.ts to use shared utilities\n   - Removed private isStickyNote() method (8 locations)\n   - Eliminated code duplication\n\nTesting:\n- Created comprehensive test suites (54 new tests, 100% coverage)\n- Tested with n8n-mcp-tester agent using real n8n instance\n- All test scenarios passed including regression tests\n- Validated against real workflows with sticky notes\n\nImpact:\n- Sticky notes no longer block workflow updates\n- Matches n8n UI behavior exactly\n- Zero regressions in existing validation\n- All MCP workflow tools now work correctly with annotated workflows\n\nFiles Changed:\n- NEW: src/utils/node-classification.ts\n- NEW: tests/unit/utils/node-classification.test.ts (44 tests)\n- NEW: tests/unit/services/n8n-validation-sticky-notes.test.ts (10 tests)\n- MODIFIED: src/services/n8n-validation.ts (lines 198-259)\n- MODIFIED: src/services/workflow-validator.ts (8 locations)\n- MODIFIED: tests/unit/validation-fixes.test.ts\n- MODIFIED: CHANGELOG.md (v2.20.8 entry)\n- MODIFIED: package.json (version bump to 2.20.8)\n\nTest Results:\n- Unit tests: 54 new tests passing, 100% coverage on utilities\n- Integration tests: All 10 sticky notes validation tests passing\n- Regression tests: Zero failures in existing test suite\n- Real-world testing: 4 test workflows validated successfully\n\nConceived by Romuald Członkowski - www.aiadvisors.pl/en",
+          "timestamp": "2025-10-22T17:58:13+02:00",
+          "tree_id": "1f3c678254a0d92f544e684ff04aa889d651ee7f",
+          "url": "https://github.com/czlonkowski/n8n-mcp/commit/c76ffd9fb182a75a64642d73118b112adfa12b96"
+        },
+        "date": 1761148815471,
         "tool": "customSmallerIsBetter",
         "benches": [
           {
